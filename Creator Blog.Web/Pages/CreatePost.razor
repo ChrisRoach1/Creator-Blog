@@ -1,0 +1,40 @@
+﻿@using Creator_Blog.Data.Models;
+@using Creator_Blog.Web.Services
+@inject IBlogPostService service
+
+@page "/createPost"
+
+
+
+<h2>Create a Post!</h2>
+
+
+<SfRichTextEditor @bind-Value="@PostValue" @ref="RteObj">
+
+</SfRichTextEditor>
+
+<button @onclick="clearPost">Clear</button>
+<button @onclick="createBlogPost">Create</button>
+
+
+<h3>@PostValue</h3>
+
+@code {
+
+    SfRichTextEditor RteObj;
+
+    private string PostValue { get; set; } = String.Empty;
+
+    private void clearPost()
+    {
+        this.PostValue = "";
+    }
+
+    private async Task createBlogPost()
+    {
+        BlogPost post = new BlogPost();
+        post.BlogPostContent = this.PostValue;
+        post = await service.CreateBlogPostAsync(post);
+    }
+
+}
